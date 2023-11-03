@@ -82,6 +82,7 @@ function fetchLocation(location) {
         dayDiv.querySelector('.day').textContent = formattedDate;
         dayDiv.querySelector('.moon-phase').textContent = moonPhase;
         dayDiv.querySelector('.temp-text').textContent = averageTemp;
+        dayDiv.querySelector('.temp-format').textContent = '°C';
         dayDiv.querySelector('.condition').textContent = condition;
         dayDiv.querySelector('.humidity').textContent = `Humidity: ${humidity}%`;
         if (rainChance > 50) {
