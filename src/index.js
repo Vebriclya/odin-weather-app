@@ -9,6 +9,8 @@ function component() {
     const header = addDiv("header", windowDiv);
     const locationDiv = addDiv("location-div", header);
     const searchBox = document.createElement("input");
+    searchBox.setAttribute("class", "search");
+    searchBox.placeholder = "Search city";
     header.appendChild(searchBox);
 
     for (let index = 1; index < 4; index++) {
@@ -22,14 +24,15 @@ function component() {
                 return response.json();
             })
             .then(function (response) {
-                // SETTING THE HEADER TEXT
+                // SETTING THE HEADER TEXT AND SELECTING THE SEARCHBOX
                 const forecast = response.forecast;
-                const location = response.location.name + ", " + response.location.country;
+                const location = response.location.name.toUpperCase() + ", " + response.location.country.toUpperCase();
                 const forecastDayArray = forecast.forecastday;
                 locationDiv.innerText = location;
+                const searchBox = document.querySelector('.search');
                 
+                // INITIAL POPULATION OF WEATHER
                 let index = 0;
-
                 forecastDayArray.forEach(function (day, index) {
                     const date = new Date(day.date);
                     let formattedDate = format(date, 'eeee');
@@ -59,14 +62,6 @@ function component() {
                     }
                 }
                 );
-
-
-                for (let index = 1; index < 4; index++) {
-                    let weatherBox = document.getElementById(("day-" + index));
-
-
-
-                }
             })
     });
 
