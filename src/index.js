@@ -1,23 +1,22 @@
+import './styles.css'
 import _ from 'lodash';
 import { format } from 'date-fns';
 
 function component() {
-    const element = document.createElement('div');
-    element.className = "window-div"
+    const windowDiv = document.createElement('div');
+    windowDiv.className = "window-div";
 
-    const displayWeather = addDiv('displayWeather', element);
-    const tempBox = addDiv('tempBox', displayWeather);
-    const locationBox = addDiv('locationBox', displayWeather);
-    const dayBox = addDiv('dayBox', displayWeather);
+    addDiv("header", windowDiv);
 
-    const searchDiv = addDiv('searchDiv', element);
-    const searchBox = document.createElement("input");
-    searchBox.className = "searchBox";
-    searchDiv.appendChild(searchBox);
+    for (let index = 1; index < 4; index++) {
+        generateWeatherSection(("day-" + index), windowDiv);
+    }
 
 
+    loadWeather();
 
-    return element;
+
+    return windowDiv;
 }
 
 document.body.appendChild(component());
@@ -30,13 +29,21 @@ function addDiv(className, appendThis){
     return sectionName;
 }
 
+function generateWeatherSection(id, appendThis){
+    let weatherSection = addDiv("weather-section", appendThis);
+    weatherSection.setAttribute('id', id);
+
+    appendThis.appendChild(weatherSection);
+    return weatherSection;
+}
 
 function getLocation(location){
     lowercaseLocation = location.toLowerCase();
     return "https://api.weatherapi.com/v1/forecast.json?key=5a27d69e27f140f58e7141821230211&q=" + lowercaseLocation + "&days=3";
 }
 
-fetch('https://api.weatherapi.com/v1/forecast.json?key=5a27d69e27f140f58e7141821230211&q=felixstowe&days=3')
+function loadWeather(location = "felixstowe"){
+    fetch('https://api.weatherapi.com/v1/forecast.json?key=5a27d69e27f140f58e7141821230211&q=felixstowe&days=3')
 .then(function(response){
     return response.json();
 })
@@ -49,11 +56,9 @@ fetch('https://api.weatherapi.com/v1/forecast.json?key=5a27d69e27f140f58e7141821
         const formattedDate = format(date, 'eeee');
         console.log(formattedDate);
         console.log("Moon Phase: " + day.astro.moon_phase);
-        console.log("Min Temperature: " + day.day.mintemp_c + "°C");
-        console.log("Max Temperature: " + day.day.maxtemp_c + "°C");
-        if((day.day.mintemp_c > 20) && (day.day.avghumidity > 60)){
-            console.log("Humidity: " + day.day.avghumidity);
-        }
+        console.log("Temperature: " + day.day.avgtemp_c + "°C");
+        console.log("Condition: " + day.day.condition.text);
+        console.log("Humidity: " + day.day.avghumidity + "%");
         if(day.day.daily_chance_of_rain > 50){
             console.log("Chance of rain: " + day.day.daily_chance_of_rain + "%");
         }
@@ -61,7 +66,7 @@ fetch('https://api.weatherapi.com/v1/forecast.json?key=5a27d69e27f140f58e7141821
             console.log("Chance of snow: " + day.day.daily_chance_of_snow);
         }
         if(day.day.maxwind_mph > 30){
-            console.log("High winds possible today, Max windspeed: " + day.day.maxwind_mph);
+            console.log("High winds possible today, Max windspeed: " + day.day.maxwind_mph + "mph");
         }
         console.log("");
     });
@@ -69,3 +74,5 @@ fetch('https://api.weatherapi.com/v1/forecast.json?key=5a27d69e27f140f58e7141821
 .catch(function(err){
     console.error(err);
 });
+}
+
