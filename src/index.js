@@ -39,7 +39,25 @@ function fetchLocation(location) {
   const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=5a27d69e27f140f58e7141821230211&q=${location}&days=3`;
 
   fetch(apiUrl)
-    .then((response) => response.json())
+    .then((response) => {
+      const weatherSections = document.querySelectorAll('.weather-section');
+
+      if (!response.ok) {
+        // do something
+        const locationDiv = document.querySelector('.location-div');
+        locationDiv.textContent = 'Location not found';
+        weatherSections.forEach((section) => {
+          section.style.display = 'none';
+        });
+        throw new Error('Location not found');
+      } else {
+        weatherSections.forEach((section) => {
+          section.style.display = '';
+        });
+      }
+
+      return response.json();
+    })
     .then((response) => {
       // SETTING THE HEADER TEXT AND SELECTING THE SEARCHBOX
       const { forecast } = response;
