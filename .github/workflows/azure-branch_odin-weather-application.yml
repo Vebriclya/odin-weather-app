@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: odin-weather-application
+  AZURE_WEBAPP_NAME: "odin-weather-application"
   AZURE_WEBAPP_PACKAGE_PATH: "./src/index.js"
   NODE_VERSION: "6.9.0"
 
